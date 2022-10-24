@@ -6,7 +6,7 @@ const { nanoid } = require('nanoid');
 const mavlink = require('./mavlink.js');
 
 // let mavPortNum = 'COM18';
-let mavPortNum = '/dev/ttyAMA2';
+let mavPortNum = '/dev/ttyAMA0';
 let mavBaudrate = '115200';
 let mavPort = null;
 
@@ -245,7 +245,9 @@ function parseMavFromDrone(mavPacket) {
             globalpositionint_msg.hdg = Buffer.from(hdg, 'hex').readUInt16LE(0) / 100;
 
             // console.log('globalpositionint_msg heading = ' + globalpositionint_msg.hdg);
-            mqtt_client.publish(pub_gps_location_topic, JSON.stringify(globalpositionint_msg));
+            mqtt_client.publish(pub_gps_location_topic, JSON.stringify(globalpositionint_msg), () => {
+                // console.log('pub_gps_location_message', JSON.stringify(globalpositionint_msg));
+            });
 
         } else if (msg_id === mavlink.MAVLINK_MSG_ID_ATTITUDE) {
             let my_len = 28;
@@ -276,42 +278,6 @@ function parseMavFromDrone(mavPacket) {
             attitude_msg.rollspeed = Buffer.from(rollspeed, 'hex').readFloatLE(0);
             attitude_msg.pitchspeed = Buffer.from(pitchspeed, 'hex').readFloatLE(0);
             attitude_msg.yawspeed = Buffer.from(yawspeed, 'hex').readFloatLE(0);
-
-            // let arrRoll = [];
-            // let arrPitch = [];
-            // let info = {};
-            // let heading = 0;
-
-            // arrRoll.push((-1) * roll * 100);
-            // while (arrRoll.length > 3) {
-            //     arrRoll.shift();
-            // }
-
-            // attitude_msg.roll = arrRoll.reduce((p, c) => p + c, 0) / arrRoll.length;
-            // attitude_msg.roll = attitude_msg.roll * (180 / 3.14);
-
-            // info.bankAngle = (-1) * attitude_msg.roll;
-            // // console.log('roll(rad): ' + (roll));
-
-            // arrPitch.push(pitch * 100);
-            // while (arrPitch.length > 3) {
-            //     arrPitch.shift();
-            // }
-            // attitude_msg.pitch = arrPitch.reduce((p, c) => p + c, 0) / arrPitch.length;
-            // attitude_msg.pitch = attitude_msg.pitch * (180 / 3.14);
-
-            // info.anglePitch = attitude_msg.pitch;
-            // // console.log('pitch(rad): ' + (pitch));
-            // // console.log('pitch(deg): ' + (pitch * (180/3.14)));
-            // // console.log('roll: ' + roll, 'pitch: ' + pitch);
-
-            // if (attitude_msg.yaw < 0) {
-            //     attitude_msg.yaw += (2 * Math.PI);
-            // }
-            // // console.log('yaw', ((yaw * 180) / Math.PI));
-            // heading = ((attitude_msg.yaw * 180) / Math.PI);
-
-            // // console.log('attitude heading = ' + heading);
 
             mqtt_client.publish(pub_gps_attitude_topic, JSON.stringify(attitude_msg), () => {
                 // console.log('publish message to local mqtt: ', attitude_msg)

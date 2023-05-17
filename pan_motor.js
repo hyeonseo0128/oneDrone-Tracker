@@ -82,7 +82,7 @@ let sub_gps_attitude_topic = '/GPS/attitude';
 
 let pub_motor_position_topic = '/Ant_Tracker/Motor_Pan';
 
-let sitl_state = true;
+let sitl_state = false;
 let sitl_mqtt_host = 'gcs.iotocean.org';
 let sitlmqtt = '';
 

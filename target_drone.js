@@ -7,16 +7,14 @@ try {
     drone_info = JSON.parse(fs.readFileSync('drone_info.json', 'utf8'));
 } catch (e) {
     console.log('can not find [ drone_info.json ] file');
-    drone_info.host = "gcs.iotocean.org"
-    drone_info.drone = "Flight_2"
-    drone_info.gcs = "KETI_MUV"
-    drone_info.type = "ardupilot"
-    drone_info.system_id = 1
-    drone_info.gcs_ip = "192.168.50.150"
-    drone_info.update = "disable"
-    drone_info.mission = {}
+    drone_info.host = "121.137.228.240";
+    drone_info.drone = "UMACA1";
+    drone_info.gcs = "UMACAIR";
+    drone_info.type = "ardupilot";
+    drone_info.system_id = 1;
+    drone_info.gcs_ip = "192.168.1.150";
 
-    fs.writeFileSync('../drone_info.json', JSON.stringify(drone_info, null, 4), 'utf8');
+    fs.writeFileSync('./drone_info.json', JSON.stringify(drone_info, null, 4), 'utf8');
 }
 
 let local_mqtt_host = '127.0.0.1';
@@ -24,7 +22,7 @@ let localmqtt = null;
 
 let gcs_mqtt_host = drone_info.gcs_ip;
 let gcs_mqtt = null;
-let gcs_mqtt_message = '';
+// let gcs_mqtt_message = '';
 
 let sub_drone_data_topic = '/RF/TELE_HUB/drone';
 // let sub_drone_data_topic = '/gcs/TELE_HUB/drone/rf/' + drone_info.drone;
@@ -64,7 +62,7 @@ function local_mqtt_connect(host) {
     });
 
     localmqtt.on('message', function (topic, message) {
-        console.log('[motor] topic, message => ', topic, message.toString());
+        // console.log('[motor] topic, message => ', topic, message.toString());
         if (topic === sub_pan_motor_position_topic) {
             try {
                 gcs_mqtt.publish(sub_pan_motor_position_topic, message.toString(), () => {

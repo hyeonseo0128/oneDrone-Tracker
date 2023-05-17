@@ -34,6 +34,7 @@ let sub_tilt_motor_position_topic = '/Ant_Tracker/Motor_Tilt';
 
 let pub_drone_data_topic = '/RF/TELE_HUB/drone';
 let motor_control_topic = '/Ant_Tracker/Control';
+let motor_altitude_topic = '/Ant_Tracker/Altitude';
 
 //------------- local mqtt connect ------------------
 function local_mqtt_connect(host) {
@@ -115,6 +116,9 @@ function gcs_mqtt_connect(host) {
         gcs_mqtt.subscribe(motor_control_topic + '/#', () => {
             console.log('[gcs] gcs_mqtt subscribed -> ', motor_control_topic);
         });
+        gcs_mqtt.subscribe(motor_altitude_topic + '/#', () => {
+            console.log('[gcs] gcs_mqtt subscribed -> ', motor_altitude_topic);
+        });
     });
 
     gcs_mqtt.on('message', function (topic, message) {
@@ -131,6 +135,13 @@ function gcs_mqtt_connect(host) {
         } else if (topic === motor_control_topic) {
             try {
                 localmqtt.publish(motor_control_topic, message.toString(), () => {
+                    // console.log('send motor control message: ', motor_control_topic, message.toString());
+                });
+            } catch {
+            }
+        } else if (topic === motor_altitude_topic) {
+            try {
+                localmqtt.publish(motor_altitude_topic, message.toString(), () => {
                     // console.log('send motor control message: ', motor_control_topic, message.toString());
                 });
             } catch {

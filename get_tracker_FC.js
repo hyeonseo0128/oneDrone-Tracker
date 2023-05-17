@@ -5,8 +5,8 @@ const { nanoid } = require('nanoid');
 
 const mavlink = require('./mavlink.js');
 
-let mavPortNum = 'COM18';
-// let mavPortNum = '/dev/ttyAMA1';
+// let mavPortNum = 'COM18';
+let mavPortNum = '/dev/ttyAMA2';
 let mavBaudrate = '115200';
 let mavPort = null;
 
@@ -51,12 +51,12 @@ function mavPortOpening() {
         mavPort.on('error', mavPortError);
         mavPort.on('data', mavPortData);
     } else {
-        if (can_port.isOpen) {
-            can_port.close();
-            can_port = null;
-            setTimeout(canPortOpening, 2000);
+        if (mavPort.isOpen) {
+            mavPort.close();
+            mavPort = null;
+            setTimeout(mavPortOpening, 2000);
         } else {
-            can_port.open();
+            mavPort.open();
         }
     }
 }

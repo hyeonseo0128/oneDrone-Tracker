@@ -69,7 +69,7 @@ let motor_return_msg = '';
 
 let sub_drone_data_topic = '/RF/TELE_HUB/drone';
 let sub_motor_control_topic = '/Ant_Tracker/Control';
-let sub_motor_attitude_topic = '/Ant_Tracker/Attitude';
+let sub_motor_altitude_topic = '/Ant_Tracker/Altitude';
 let sub_gps_location_topic = '/GPS/location';
 let sub_gps_attitude_topic = '/GPS/attitude';
 
@@ -174,8 +174,8 @@ function localMqttConnect(host) {
         localmqtt.subscribe(sub_motor_control_topic + '/#', () => {
             console.log('[tilt] localmqtt subscribed -> ', sub_motor_control_topic);
         });
-        localmqtt.subscribe(sub_motor_attitude_topic + '/#', () => {
-            console.log('[tilt] localmqtt subscribed -> ', sub_motor_attitude_topic);
+        localmqtt.subscribe(sub_motor_altitude_topic + '/#', () => {
+            console.log('[tilt] localmqtt subscribed -> ', sub_motor_altitude_topic);
         });
     });
 
@@ -387,11 +387,11 @@ let initAction = () => {
         motor_control_message = 'zero';
 
         setTimeout(() => {
-            if (myHeading !== 0) {
-                if (myHeading > 0) {
+            if (myPitch !== 0) {
+                if (myPitch > 0) {
                     motor_control_message = 'go-' + myPitch;
                 }
-                else if (myHeading < 0) {
+                else if (myPitch < 0) {
                     motor_control_message = 'go' + myPitch * (-1);
                 }
                 setTimeout(() => {

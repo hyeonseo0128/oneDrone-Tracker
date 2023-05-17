@@ -46,6 +46,7 @@ let localmqtt = null;
 
 let localmqtt_message = '';
 let motor_control_message = '';
+let motor_altitude_message = '';
 let tracker_location_msg = '';
 let tracker_attitude_msg = '';
 
@@ -53,6 +54,7 @@ let myLatitude = 0.0;
 let myLongitude = 0.0;
 let myAltitude = 0.0;
 let myRelativeAltitude = 0.0;
+let myHeading = 0.0;
 
 let myRoll = 0.0;
 let myPitch = 0.0;

@@ -185,8 +185,11 @@ function localMqttConnect(host) {
         if (topic == sub_motor_control_topic) { // 모터 제어 메세지 수신
             motor_control_message = message.toString();
             // console.log(topic, motor_control_message);
-        } else if (topic == sub_motor_attitude_topic) {
-
+        } else if (topic == sub_motor_altitude_topic) {
+            motor_altitude_message = message.toString();
+            if (typeof (parseInt(motor_altitude_message)) === 'number') {
+                myRelativeAltitude = motor_altitude_message;
+            }
         } else if (topic.includes(sub_drone_data_topic)) { // 드론데이터 수신
             localmqtt_message = message.toString('hex');
             // console.log("Client1 topic => " + topic);
